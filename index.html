@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Calculadora</title>
-            <!-- iOS Web App -->
+                <!-- iOS Web App -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="Calculadora">
@@ -78,52 +78,30 @@
 
         body.sa .btn {
             font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-            border-radius: 50%;
-            aspect-ratio: 1;
         }
 
         body.sa .btn-gray {
             font-weight: 400;
-            font-size: 32px;
+            font-size: 34px;
         }
 
         body.sa .btn-dark {
             font-weight: 300;
-            font-size: 36px;
+            font-size: 38px;
         }
 
         body.sa .btn-orange {
             font-weight: 400;
-            font-size: 40px;
+            font-size: 42px;
         }
 
         body.sa .btn-zero {
-            font-size: 36px;
-            border-radius: 50px;
+            font-size: 38px;
         }
 
         body.sa .buttons {
-            gap: 14px;
-            padding: 14px;
-        }
-
-        /* Long-press confirmation indicator */
-        .longpress-indicator {
-            position: fixed;
-            top: 8px;
-            left: 8px;
-            width: 3px;
-            height: 3px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            z-index: 9999;
-            pointer-events: none;
-        }
-
-        .longpress-indicator.show {
-            opacity: 1;
+            gap: 12px;
+            padding: 12px;
         }
 
         body {
@@ -221,7 +199,6 @@
         
         .btn-orange span {
             transform: translateY(-2px);
-            pointer-events: none;
         }
 
         .btn-orange.active {
@@ -266,8 +243,8 @@
             background: #1c1c1e;
             border-radius: 20px;
             padding: 30px;
-            max-width: 500px;
-            width: 95%;
+            max-width: 400px;
+            width: 90%;
             max-height: 80vh;
             display: flex;
             flex-direction: column;
@@ -703,9 +680,6 @@
     </style>
 </head>
 <body>
-    <!-- Long-press confirmation indicator -->
-    <div class="longpress-indicator" id="longpress-indicator"></div>
-    
     <div class="calculator">
         <div class="display">
             <div class="display-text" id="display">0</div>
@@ -714,26 +688,26 @@
             <button class="btn btn-gray" id="ac-button" onclick="clearAll()">AC</button>
             <button class="btn btn-gray" onclick="toggleSign()">+/-</button>
             <button class="btn btn-gray" onclick="openSecretMenu()">%</button>
-            <button class="btn btn-orange" data-operation="÷"><span>÷</span></button>
+            <button class="btn btn-orange" onclick="lastEvent=event; setOperation('÷')"><span>÷</span></button>
             
             <button class="btn btn-dark" onclick="appendNumber('7')">7</button>
             <button class="btn btn-dark" onclick="appendNumber('8')">8</button>
             <button class="btn btn-dark" onclick="appendNumber('9')">9</button>
-            <button class="btn btn-orange" data-operation="×"><span>×</span></button>
+            <button class="btn btn-orange" onclick="lastEvent=event; setOperation('×')"><span>×</span></button>
             
             <button class="btn btn-dark" onclick="appendNumber('4')">4</button>
             <button class="btn btn-dark" onclick="appendNumber('5')">5</button>
             <button class="btn btn-dark" onclick="appendNumber('6')">6</button>
-            <button class="btn btn-orange" data-operation="-"><span>−</span></button>
+            <button class="btn btn-orange" onclick="lastEvent=event; setOperation('-')"><span>−</span></button>
             
             <button class="btn btn-dark" onclick="appendNumber('1')">1</button>
             <button class="btn btn-dark" onclick="appendNumber('2')">2</button>
             <button class="btn btn-dark" onclick="appendNumber('3')">3</button>
-            <button class="btn btn-orange" data-operation="+"><span>+</span></button>
+            <button class="btn btn-orange" onclick="lastEvent=event; setOperation('+')"><span>+</span></button>
             
             <button class="btn btn-dark btn-zero" onclick="appendNumber('0')">0</button>
             <button class="btn btn-dark" onclick="appendDecimal()">,</button>
-            <button class="btn btn-orange" id="equals-btn"><span>=</span></button>
+            <button class="btn btn-orange" id="equals-btn" onclick="calculate()" ontouchstart="lastEvent=event; startEqualsLongPress(event)" ontouchend="endEqualsLongPress()" onmousedown="lastEvent=event; startEqualsLongPress(event)" onmouseup="endEqualsLongPress()"><span>=</span></button>
         </div>
     </div>
 
@@ -758,11 +732,11 @@
                     <span class="checkmark">✓</span>
                 </button>
                 <div class="time-buttons" id="date-time-buttons">
-                    <button class="time-btn selected" onclick="selectTimeThreshold(10, this)">10s</button>
-                    <button class="time-btn" onclick="selectTimeThreshold(15, this)">15s</button>
-                    <button class="time-btn" onclick="selectTimeThreshold(20, this)">20s</button>
-                    <button class="time-btn" onclick="selectTimeThreshold('10-15', this)">10-15s</button>
-                    <button class="time-btn" onclick="selectTimeThreshold('10-20', this)">10-20s</button>
+                    <button class="time-btn selected" onclick="lastEvent=event; selectTimeThreshold(10)">10s</button>
+                    <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold(15)">15s</button>
+                    <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold(20)">20s</button>
+                    <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold('10-15')">10-15s</button>
+                    <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold('10-20')">10-20s</button>
                 </div>
                 
                 <button class="mode-button" id="custom-mode-btn" onclick="selectMode('custom')">
@@ -770,11 +744,11 @@
                     <span class="checkmark"></span>
                 </button>
                 <div class="time-buttons" id="custom-time-buttons" style="display: none;">
-                    <button class="time-btn selected" onclick="selectTimeThreshold(10, this)">10s</button>
-                    <button class="time-btn" onclick="selectTimeThreshold(15, this)">15s</button>
-                    <button class="time-btn" onclick="selectTimeThreshold(20, this)">20s</button>
-                    <button class="time-btn" onclick="selectTimeThreshold('10-15', this)">10-15s</button>
-                    <button class="time-btn" onclick="selectTimeThreshold('10-20', this)">10-20s</button>
+                    <button class="time-btn selected" onclick="lastEvent=event; selectTimeThreshold(10)">10s</button>
+                    <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold(15)">15s</button>
+                    <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold(20)">20s</button>
+                    <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold('10-15')">10-15s</button>
+                    <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold('10-20')">10-20s</button>
                 </div>
                 
                 <div class="custom-input-container" id="custom-input-container">
@@ -803,21 +777,21 @@
                     
                     <!-- Time buttons for date submode -->
                     <div class="time-buttons" id="spectator-date-time-buttons">
-                        <button class="time-btn selected" onclick="selectTimeThreshold(10, this)">10s</button>
-                        <button class="time-btn" onclick="selectTimeThreshold(15, this)">15s</button>
-                        <button class="time-btn" onclick="selectTimeThreshold(20, this)">20s</button>
-                        <button class="time-btn" onclick="selectTimeThreshold('10-15', this)">10-15s</button>
-                        <button class="time-btn" onclick="selectTimeThreshold('10-20', this)">10-20s</button>
+                        <button class="time-btn selected" onclick="lastEvent=event; selectTimeThreshold(10)">10s</button>
+                        <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold(15)">15s</button>
+                        <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold(20)">20s</button>
+                        <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold('10-15')">10-15s</button>
+                        <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold('10-20')">10-20s</button>
                     </div>
                     
                     <!-- Options for custom submode -->
                     <div id="spectator-custom-options" style="display: none;">
                         <div class="time-buttons">
-                            <button class="time-btn selected" onclick="selectTimeThreshold(10, this)">10s</button>
-                            <button class="time-btn" onclick="selectTimeThreshold(15, this)">15s</button>
-                            <button class="time-btn" onclick="selectTimeThreshold(20, this)">20s</button>
-                            <button class="time-btn" onclick="selectTimeThreshold('10-15', this)">10-15s</button>
-                            <button class="time-btn" onclick="selectTimeThreshold('10-20', this)">10-20s</button>
+                            <button class="time-btn selected" onclick="lastEvent=event; selectTimeThreshold(10)">10s</button>
+                            <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold(15)">15s</button>
+                            <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold(20)">20s</button>
+                            <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold('10-15')">10-15s</button>
+                            <button class="time-btn" onclick="lastEvent=event; selectTimeThreshold('10-20')">10-20s</button>
                         </div>
                         <div class="custom-input-container active">
                             <div class="input-label">Introduce el número final deseado:</div>
@@ -846,7 +820,7 @@
                 <button class="close-btn" onclick="closeInfoPopup()">✕</button>
             </div>
             <div class="info-content" id="info-content"></div>
-            <button class="copy-btn" onclick="copyInfo()">Copiar</button>
+            <button class="copy-btn" onclick="lastEvent=event; copyInfo()">Copiar</button>
             <div class="fav-number-display" id="fav-number-display" style="display: none;"></div>
         </div>
     </div>
@@ -894,6 +868,14 @@
         
         // Theme variable
         let currentTheme = 'iphone'; // 'iphone', 'sa', 'android-light', or 'android-dark'
+        
+        // Global event storage for standalone mode compatibility
+        let lastEvent = null;
+        
+        // Helper function to get current event (works in both browser and standalone mode)
+        function getCurrentEvent() {
+            return lastEvent || window.event || event;
+        }
 
         function selectTheme(theme) {
             currentTheme = theme;
@@ -1056,8 +1038,7 @@
 
             if (screenLocked) return;
 
-            // Get event from global storage (for standalone mode compatibility)
-            const evt = window.currentOperationEvent;
+            const evt = getCurrentEvent();
 
             // DATE MODE: Check if we should activate magic (any multiplications + plus)
             if (magicMode === 'date' && op === '+' && multiplicationCount >= 1 && !magicTriggered) {
@@ -1070,7 +1051,7 @@
                 
                 // Highlight + button
                 document.querySelectorAll('.btn-orange').forEach(btn => btn.classList.remove('active'));
-                if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
+                if (evt && evt.target) evt.target.classList.add('active');
                 return;
             }
 
@@ -1085,7 +1066,7 @@
                 
                 // Highlight + button
                 document.querySelectorAll('.btn-orange').forEach(btn => btn.classList.remove('active'));
-                if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
+                if (evt && evt.target) evt.target.classList.add('active');
                 return;
             }
 
@@ -1097,7 +1078,7 @@
                     operation = '+';
                     shouldResetDisplay = true;
                     document.querySelectorAll('.btn-orange').forEach(btn => btn.classList.remove('active'));
-                    if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
+                    if (evt && evt.target) evt.target.classList.add('active');
                     return;
                 } else if (spectatorSubmode === 'custom' && customModeActivated) {
                     waitingForMagicTrigger = true;
@@ -1105,7 +1086,7 @@
                     operation = '+';
                     shouldResetDisplay = true;
                     document.querySelectorAll('.btn-orange').forEach(btn => btn.classList.remove('active'));
-                    if (evt && evt.currentTarget) evt.currentTarget.classList.add('active');
+                    if (evt && evt.target) evt.target.classList.add('active');
                     return;
                 }
             }
@@ -1121,8 +1102,8 @@
             
             // Update active state
             document.querySelectorAll('.btn-orange').forEach(btn => btn.classList.remove('active'));
-            if (evt && evt.currentTarget) {
-                evt.currentTarget.classList.add('active');
+            if (evt && evt.target) {
+                evt.target.classList.add('active');
             }
         }
 
@@ -1236,34 +1217,18 @@
             return difference.toString();
         }
 
-        // Long press functions for = button (custom mode and spectator+ custom)
+        // Long press functions for = button (custom mode)
         function startEqualsLongPress(e) {
             e.preventDefault();
             isEqualsLongPress = false;
             
-            // Enable long press in custom mode OR spectator+ custom submode
-            const shouldEnableLongPress = 
-                (magicMode === 'custom' && customResult) ||
-                (magicMode === 'spectator' && spectatorSubmode === 'custom' && spectatorCustomResult);
-            
-            if (shouldEnableLongPress) {
+            // Only enable long press in custom mode
+            if (magicMode === 'custom' && customResult) {
                 equalsLongPressTimer = setTimeout(() => {
                     isEqualsLongPress = true;
                     customModeActivated = true;
-                    
-                    // Show confirmation indicator
-                    showLongPressIndicator();
-                }, 1000); // 1 second
-            }
-        }
-
-        function showLongPressIndicator() {
-            const indicator = document.getElementById('longpress-indicator');
-            if (indicator) {
-                indicator.classList.add('show');
-                setTimeout(() => {
-                    indicator.classList.remove('show');
-                }, 1250); // 1.25 seconds visible
+                    // Visual feedback could be added here
+                }, 2000); // 2 seconds
             }
         }
 
@@ -1373,7 +1338,7 @@
             closeTemplateEditor();
         }
 
-        function selectTimeThreshold(threshold, buttonElement) {
+        function selectTimeThreshold(threshold) {
             timeThreshold = threshold;
             
             // Remove selected class from all time buttons in both groups
@@ -1382,8 +1347,9 @@
             });
             
             // Add selected class to clicked button
-            if (buttonElement) {
-                buttonElement.classList.add('selected');
+            const evt = getCurrentEvent();
+            if (evt && evt.target) {
+                evt.target.classList.add('selected');
             }
         }
 
@@ -1395,46 +1361,6 @@
         document.getElementById('spectator-custom-result').addEventListener('input', function(e) {
             spectatorCustomResult = e.target.value.replace(/\D/g, '');
             e.target.value = spectatorCustomResult;
-        });
-
-        // Equals button event listeners (for standalone mode compatibility)
-        const equalsBtn = document.getElementById('equals-btn');
-        
-        // Click event
-        equalsBtn.addEventListener('click', function() {
-            if (!isEqualsLongPress) {
-                calculate();
-            }
-        });
-        
-        // Touch events
-        equalsBtn.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            startEqualsLongPress(e);
-        }, { passive: false });
-        
-        equalsBtn.addEventListener('touchend', function(e) {
-            e.preventDefault();
-            endEqualsLongPress();
-        }, { passive: false });
-        
-        // Mouse events (for desktop)
-        equalsBtn.addEventListener('mousedown', function(e) {
-            startEqualsLongPress(e);
-        });
-        
-        equalsBtn.addEventListener('mouseup', function(e) {
-            endEqualsLongPress();
-        });
-
-        // Operation buttons event listeners (for standalone mode compatibility)
-        document.querySelectorAll('.btn-orange[data-operation]').forEach(button => {
-            button.addEventListener('click', function(e) {
-                const operation = this.getAttribute('data-operation');
-                // Create a custom event object that setOperation can use
-                window.currentOperationEvent = e;
-                setOperation(operation);
-            });
         });
 
         // Spectator+ helper functions
@@ -1600,12 +1526,15 @@ Número Favorito: ${favNumber}`;
             }
             
             navigator.clipboard.writeText(textToCopy).then(() => {
-                const btn = event.currentTarget;
-                const originalText = btn.textContent;
-                btn.textContent = '¡Copiado!';
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                }, 1500);
+                const evt = getCurrentEvent();
+                const btn = evt && evt.target ? evt.target : null;
+                if (btn) {
+                    const originalText = btn.textContent;
+                    btn.textContent = '¡Copiado!';
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                    }, 1500);
+                }
             });
         }
 
